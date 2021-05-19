@@ -5,9 +5,11 @@
 package it.polito.tdp.borders;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.borders.model.Country;
+import it.polito.tdp.borders.model.CountryAndNumber;
 import it.polito.tdp.borders.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,11 +44,13 @@ public class FXMLController {
 			int anno = Integer.parseInt(annoS);
 
 			model.creaGrafo(anno);
-			
+			this.boxNazione.getItems().addAll(model.getCountries());
 			
 			//calcola numero di confini
-			// TODO
-			
+			List<CountryAndNumber> result= model.getCountryAndNumbers();
+			for (CountryAndNumber cn : result) {
+				this.txtResult.appendText(cn.toString()+"\n");
+			}
 
 		} catch (NumberFormatException e) {
 			txtResult.appendText("Errore di formattazione dell'anno\n");
@@ -65,7 +69,11 @@ public class FXMLController {
     	}
     	txtResult.appendText("SIMULAZIONE A PARTIRE DA: " + partenza +"\n\n");
     	
-    	//TODO
+    	model.simula(partenza);
+    	this.txtResult.appendText("Numero passi simulati: "+this.model.getT()+"\n");
+    	for (CountryAndNumber cn : this.model.getStanziali()) {
+    		this.txtResult.appendText(cn.toString()+"\n");
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
